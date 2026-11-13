@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Indicadores da Acção</ui:define>
+
+	<ui:define name="content">
+		<h2>Indicadores da Acção</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{actionIndicatorBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item"
+				value="#{actionIndicatorBean.items}" rowKey="#{item.id}"
+				paginator="true" rows="10" rowsPerPageTemplate="10,25,50"
+				emptyMessage="Sem registos." reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Acção (ID)" sortBy="#{item.action_id}">
+					<h:outputText value="#{item.action_id}" />
+				</p:column>
+				<p:column headerText="Indicador (ID)" sortBy="#{item.indicator_id}">
+					<h:outputText value="#{item.indicator_id}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{actionIndicatorBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{actionIndicatorBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg"
+			header="Indicadores da Acção" modal="true" resizable="false"
+			closeOnEscape="true" responsive="true" width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_action_id" value="Acção (ID)" />
+					<p:inputNumber id="f_action_id"
+						value="#{actionIndicatorBean.selected.action_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_indicator_id" value="Indicador (ID)" />
+					<p:inputNumber id="f_indicator_id"
+						value="#{actionIndicatorBean.selected.indicator_id}"
+						decimalPlaces="0" thousandSeparator="" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{actionIndicatorBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

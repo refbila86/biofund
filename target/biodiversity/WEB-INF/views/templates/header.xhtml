@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="jakarta.faces.facelets" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core">
+
+	<style type="text/css">
+.lang-switch {
+	display: inline-flex;
+	gap: 2px;
+	margin: 0;
+	padding: 3px;
+	border: 1px solid #d1d5db;
+	border-radius: 999px;
+	background: #f3f4f6;
+}
+
+.lang-switch a.lang-btn {
+	display: inline-block;
+	padding: 6px 12px;
+	border-radius: 999px;
+	font-size: 12.5px;
+	font-weight: 700;
+	line-height: 1;
+	color: #374151;
+	text-decoration: none;
+	transition: background .15s, color .15s;
+}
+
+.lang-switch a.lang-btn:hover {
+	background: #e5e7eb;
+}
+
+.lang-switch a.lang-btn.active {
+	background: #14532d;
+	color: #fff;
+}
+
+.lang-switch a.lang-btn:focus-visible {
+	outline: 2px solid #16a34a;
+	outline-offset: 2px;
+}
+</style>
+
+	<!-- Aplica o idioma escolhido a toda a página -->
+	<f:view locale="#{localeBean.resolve(param.lang)}">
+
+		<header class="topbar">
+
+			<div class="topbar-title">
+				<span>#{msg['header.platform']}</span>
+				<h2>#{msg['header.portal']}</h2>
+			</div>
+
+			<div class="topbar-actions">
+
+				<!-- Idioma -->
+				<div class="lang-switch">
+					<a href="?lang=pt" title="Português" lang="pt"
+						class="lang-btn#{localeBean.language eq 'pt' ? ' active' : ''}">PT</a>
+					<a href="?lang=en" title="English" lang="en"
+						class="lang-btn#{localeBean.language eq 'en' ? ' active' : ''}">EN</a>
+				</div>
+
+				<button type="button" class="notification-button"
+					title="#{msg['header.notifications']}">
+					<i class="pi pi-bell"></i>
+				</button>
+
+				<!-- Utilizador logado + Logout -->
+				<div class="user-profile">
+					<div class="user-avatar">#{loggedUserBean.initials}</div>
+					<div class="user-information">
+						<strong>#{loggedUserBean.displayName}</strong>
+						<span>#{loggedUserBean.roleLabel}</span>
+					</div>
+
+					<form method="post" action="#{request.contextPath}/logout"
+						style="margin: 0;">
+						<button type="submit" class="logout-btn"
+							title="#{msg['menu.logout']}">
+							<i class="pi pi-sign-out"></i>
+						</button>
+					</form>
+				</div>
+
+			</div>
+
+		</header>
+
+	</f:view>
+
+</ui:composition>

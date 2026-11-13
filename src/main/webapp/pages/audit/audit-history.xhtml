@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Histórico de Auditoria</ui:define>
+
+	<ui:define name="content">
+		<h2>Histórico de Auditoria</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{auditHistoryBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{auditHistoryBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Utilizador (ID)" sortBy="#{item.user_id}">
+					<h:outputText value="#{item.user_id}" />
+				</p:column>
+				<p:column headerText="Entidade Nome" sortBy="#{item.entity_name}">
+					<h:outputText value="#{item.entity_name}" />
+				</p:column>
+				<p:column headerText="Registo (ID)" sortBy="#{item.record_id}">
+					<h:outputText value="#{item.record_id}" />
+				</p:column>
+				<p:column headerText="Operação" sortBy="#{item.operation}">
+					<h:outputText value="#{item.operation}" />
+				</p:column>
+				<p:column headerText="Data/hora da operação"
+					sortBy="#{item.operation_at}">
+					<h:outputText value="#{item.operation_at}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{auditHistoryBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{auditHistoryBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg"
+			header="Histórico de Auditoria" modal="true" resizable="false"
+			closeOnEscape="true" responsive="true" width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_user_id" value="Utilizador (ID)" />
+					<p:inputNumber id="f_user_id"
+						value="#{auditHistoryBean.selected.user_id}" decimalPlaces="0"
+						thousandSeparator="" />
+					<p:outputLabel for="f_entity_name" value="Entidade Nome" />
+					<p:inputText id="f_entity_name"
+						value="#{auditHistoryBean.selected.entity_name}" />
+					<p:outputLabel for="f_record_id" value="Registo (ID)" />
+					<p:inputText id="f_record_id"
+						value="#{auditHistoryBean.selected.record_id}" />
+					<p:outputLabel for="f_operation" value="Operação" />
+					<p:inputText id="f_operation"
+						value="#{auditHistoryBean.selected.operation}" />
+					<p:outputLabel for="f_previous_value" value="Anterior Valor" />
+					<p:inputTextarea id="f_previous_value"
+						value="#{auditHistoryBean.selected.previous_value}" rows="3"
+						autoResize="false" />
+					<p:outputLabel for="f_new_value" value="Novo Valor" />
+					<p:inputTextarea id="f_new_value"
+						value="#{auditHistoryBean.selected.new_value}" rows="3"
+						autoResize="false" />
+					<p:outputLabel for="f_comment" value="Comentário" />
+					<p:inputTextarea id="f_comment"
+						value="#{auditHistoryBean.selected.comment}" rows="3"
+						autoResize="false" />
+					<p:outputLabel for="f_operation_at" value="Data/hora da operação" />
+					<p:inputText id="f_operation_at"
+						value="#{auditHistoryBean.selected.operation_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{auditHistoryBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

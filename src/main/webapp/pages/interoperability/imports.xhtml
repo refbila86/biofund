@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Importações</ui:define>
+
+	<ui:define name="content">
+		<h2>Importações</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{importBatchBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{importBatchBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Fonte Sistema" sortBy="#{item.source_system}">
+					<h:outputText value="#{item.source_system}" />
+				</p:column>
+				<p:column headerText="Ficheiro Nome" sortBy="#{item.file_name}">
+					<h:outputText value="#{item.file_name}" />
+				</p:column>
+				<p:column headerText="Estado" sortBy="#{item.status}">
+					<h:outputText value="#{item.status}" />
+				</p:column>
+				<p:column headerText="Total Registos" sortBy="#{item.total_records}">
+					<h:outputText value="#{item.total_records}" />
+				</p:column>
+				<p:column headerText="Válido Registos"
+					sortBy="#{item.valid_records}">
+					<h:outputText value="#{item.valid_records}" />
+				</p:column>
+				<p:column headerText="Rejeitados Registos"
+					sortBy="#{item.rejected_records}">
+					<h:outputText value="#{item.rejected_records}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{importBatchBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{importBatchBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Importações"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_source_system" value="Fonte Sistema" />
+					<p:inputText id="f_source_system"
+						value="#{importBatchBean.selected.source_system}" />
+					<p:outputLabel for="f_file_name" value="Ficheiro Nome" />
+					<p:inputText id="f_file_name"
+						value="#{importBatchBean.selected.file_name}" />
+					<p:outputLabel for="f_checksum" value="Checksum" />
+					<p:inputText id="f_checksum"
+						value="#{importBatchBean.selected.checksum}" />
+					<p:outputLabel for="f_status" value="Estado" />
+					<p:inputText id="f_status"
+						value="#{importBatchBean.selected.status}" />
+					<p:outputLabel for="f_total_records" value="Total Registos" />
+					<p:inputNumber id="f_total_records"
+						value="#{importBatchBean.selected.total_records}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_valid_records" value="Válido Registos" />
+					<p:inputNumber id="f_valid_records"
+						value="#{importBatchBean.selected.valid_records}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_rejected_records" value="Rejeitados Registos" />
+					<p:inputNumber id="f_rejected_records"
+						value="#{importBatchBean.selected.rejected_records}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_started_at" value="Iniciado em" />
+					<p:inputText id="f_started_at"
+						value="#{importBatchBean.selected.started_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+					<p:outputLabel for="f_completed_at" value="Concluído em" />
+					<p:inputText id="f_completed_at"
+						value="#{importBatchBean.selected.completed_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+					<p:outputLabel for="f_error_message" value="Erro Mensagem" />
+					<p:inputTextarea id="f_error_message"
+						value="#{importBatchBean.selected.error_message}" rows="3"
+						autoResize="false" />
+					<p:outputLabel for="f_created_by_id" value="Criado por (ID)" />
+					<p:inputNumber id="f_created_by_id"
+						value="#{importBatchBean.selected.created_by_id}"
+						decimalPlaces="0" thousandSeparator="" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{importBatchBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+	xmlns:ui="jakarta.faces.facelets">
+
+<h:head>
+	<title><ui:insert name="title">Biodiversity Management Platform</ui:insert>
+	</title>
+
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="stylesheet" href="#{request.contextPath}/css/platform.css" />
+</h:head>
+
+<h:body>
+
+	<div class="app-container">
+
+		<ui:include src="/WEB-INF/views/templates/sidebar.xhtml" />
+
+		<div class="main-content">
+
+			<ui:include src="/WEB-INF/views/templates/header.xhtml" />
+
+			<main class="page-content">
+				<ui:insert name="content" />
+			</main>
+
+			<!-- 			<ui:include src="/WEB-INF/views/templates/footer.xhtml" /> -->
+
+		</div>
+
+	</div>
+
+</h:body>
+</html>

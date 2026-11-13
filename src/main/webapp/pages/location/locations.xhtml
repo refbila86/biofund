@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Localizações</ui:define>
+
+	<ui:define name="content">
+		<h2>Localizações</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{locationBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{locationBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Código" sortBy="#{item.code}">
+					<h:outputText value="#{item.code}" />
+				</p:column>
+				<p:column headerText="Província" sortBy="#{item.province}">
+					<h:outputText value="#{item.province}" />
+				</p:column>
+				<p:column headerText="Distrito" sortBy="#{item.district}">
+					<h:outputText value="#{item.district}" />
+				</p:column>
+				<p:column headerText="Administrativo Posto"
+					sortBy="#{item.administrative_post}">
+					<h:outputText value="#{item.administrative_post}" />
+				</p:column>
+				<p:column headerText="Localidade" sortBy="#{item.locality}">
+					<h:outputText value="#{item.locality}" />
+				</p:column>
+				<p:column headerText="Conservação Área"
+					sortBy="#{item.conservation_area}">
+					<h:outputText value="#{item.conservation_area}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{locationBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{locationBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Localizações"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_code" value="Código" />
+					<p:inputText id="f_code" value="#{locationBean.selected.code}" />
+					<p:outputLabel for="f_province" value="Província" />
+					<p:inputText id="f_province"
+						value="#{locationBean.selected.province}" />
+					<p:outputLabel for="f_district" value="Distrito" />
+					<p:inputText id="f_district"
+						value="#{locationBean.selected.district}" />
+					<p:outputLabel for="f_administrative_post"
+						value="Administrativo Posto" />
+					<p:inputText id="f_administrative_post"
+						value="#{locationBean.selected.administrative_post}" />
+					<p:outputLabel for="f_locality" value="Localidade" />
+					<p:inputText id="f_locality"
+						value="#{locationBean.selected.locality}" />
+					<p:outputLabel for="f_conservation_area" value="Conservação Área" />
+					<p:inputText id="f_conservation_area"
+						value="#{locationBean.selected.conservation_area}" />
+					<p:outputLabel for="f_key_biodiversity_area"
+						value="Chave Biodiversidade Área" />
+					<p:inputText id="f_key_biodiversity_area"
+						value="#{locationBean.selected.key_biodiversity_area}" />
+					<p:outputLabel for="f_ecosystem" value="Ecossistema" />
+					<p:inputText id="f_ecosystem"
+						value="#{locationBean.selected.ecosystem}" />
+					<p:outputLabel for="f_latitude" value="Latitude" />
+					<p:inputNumber id="f_latitude"
+						value="#{locationBean.selected.latitude}" decimalPlaces="6"
+						decimalSeparator="," thousandSeparator="" />
+					<p:outputLabel for="f_longitude" value="Longitude" />
+					<p:inputNumber id="f_longitude"
+						value="#{locationBean.selected.longitude}" decimalPlaces="6"
+						decimalSeparator="," thousandSeparator="" />
+					<p:outputLabel for="f_geographic_reference"
+						value="Geográfico Referência" />
+					<p:inputText id="f_geographic_reference"
+						value="#{locationBean.selected.geographic_reference}" />
+					<p:outputLabel for="f_active" value="Activo" />
+					<p:selectBooleanCheckbox id="f_active"
+						value="#{locationBean.selected.active}" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{locationBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

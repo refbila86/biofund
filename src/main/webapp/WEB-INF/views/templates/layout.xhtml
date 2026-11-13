@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="jakarta.faces.html"
+	xmlns:f="jakarta.faces.core" xmlns:ui="jakarta.faces.facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title><ui:insert name="title">Plataforma de Biodiversidade</ui:insert>
+		- Biodiversity</title>
+	<link rel="stylesheet" href="#{request.contextPath}/css/app.css" />
+</h:head>
+<h:body>
+	<p:growl id="growl" showDetail="true" life="4000" />
+
+	<p:menubar>
+		<p:menuitem value="Dashboard" icon="pi pi-home" outcome="/dashboard" />
+		<p:submenu label="Catálogos">
+			<p:menuitem value="Sectores" outcome="/pages/sector" />
+			<p:menuitem value="Instituições" outcome="/pages/institution" />
+			<p:menuitem value="Pontos Focais" outcome="/pages/focal-point" />
+			<p:menuitem value="Localizações" outcome="/pages/location" />
+			<p:menuitem value="Unidades de Medida"
+				outcome="/pages/measurement-unit" />
+			<p:menuitem value="Tipos de Intervenção"
+				outcome="/pages/intervention-type" />
+			<p:menuitem value="Estados da Acção" outcome="/pages/action-status" />
+			<p:menuitem value="Estados de Validação"
+				outcome="/pages/validation-status" />
+			<p:menuitem value="Fontes de Financiamento"
+				outcome="/pages/funding-source" />
+			<p:menuitem value="Fontes de Dados" outcome="/pages/data-source" />
+			<p:menuitem value="Classificações de Biodiversidade"
+				outcome="/pages/biodiversity-classification" />
+		</p:submenu>
+		<p:submenu label="Planeamento">
+			<p:menuitem value="Instrumentos Estratégicos"
+				outcome="/pages/strategic-instrument" />
+			<p:menuitem value="Programas" outcome="/pages/program" />
+			<p:menuitem value="Projectos" outcome="/pages/project" />
+			<p:menuitem value="Metas" outcome="/pages/target" />
+			<p:menuitem value="Indicadores" outcome="/pages/indicator" />
+			<p:menuitem value="Metas por Período"
+				outcome="/pages/indicator-target-period" />
+		</p:submenu>
+		<p:submenu label="Acções">
+			<p:menuitem value="Acções" outcome="/pages/action" />
+			<p:menuitem value="Orçamento da Acção" outcome="/pages/action-budget" />
+			<p:menuitem value="Execução da Acção"
+				outcome="/pages/action-execution" />
+			<p:menuitem value="Indicadores da Acção"
+				outcome="/pages/action-indicator" />
+			<p:menuitem value="Localizações da Acção"
+				outcome="/pages/action-location" />
+			<p:menuitem value="Metas da Acção" outcome="/pages/action-target" />
+			<p:menuitem value="Marcação de Biodiversidade"
+				outcome="/pages/action-biodiversity-tagging" />
+		</p:submenu>
+		<p:submenu label="Monitorização">
+			<p:menuitem value="Valores de Indicadores"
+				outcome="/pages/indicator-value" />
+			<p:menuitem value="Evidências" outcome="/pages/evidence" />
+			<p:menuitem value="Importações" outcome="/pages/import-batch" />
+			<p:menuitem value="Histórico de Auditoria"
+				outcome="/pages/audit-history" />
+		</p:submenu>
+		<p:submenu label="Administração">
+			<p:menuitem value="Utilizadores" outcome="/pages/user-account" />
+			<p:menuitem value="Perfis" outcome="/pages/role" />
+		</p:submenu>
+		<f:facet name="options">
+			<form method="post" action="#{request.contextPath}/logout"
+				class="logout-form">
+				<input type="hidden" name="_csrf" value="#{_csrf.token}" />
+				<button type="submit" class="logout-btn">Terminar sessão</button>
+			</form>
+		</f:facet>
+	</p:menubar>
+
+	<main class="content">
+		<ui:insert name="content" />
+	</main>
+
+	<h:form id="confirmForm">
+		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+			<p:commandButton value="Não" type="button"
+				styleClass="ui-confirmdialog-no ui-button-flat" />
+			<p:commandButton value="Sim" type="button"
+				styleClass="ui-confirmdialog-yes" />
+		</p:confirmDialog>
+	</h:form>
+</h:body>
+</html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+
+	<ui:define name="title">Marcação de Biodiversidade</ui:define>
+
+	<ui:define name="content">
+
+		<style>
+.status.status-warn {
+	background: #fef3c7;
+	color: #b45309;
+}
+</style>
+
+		<div class="page-heading">
+			<div>
+				<h1>Marcação de Biodiversidade</h1>
+				<p>Marque projectos, acções e rubricas orçamentais conforme o seu
+					contributo para a biodiversidade.</p>
+			</div>
+			<h:form id="headerForm">
+				<p:commandButton value="Nova marcação" icon="pi pi-plus"
+					styleClass="primary-button" process="@this"
+					actionListener="#{taggingBean.prepareNew}" update=":tagForm:fields"
+					oncomplete="PF('tagDlg').show()" />
+			</h:form>
+		</div>
+
+		<h:form id="listForm">
+			<div class="content-card table-card">
+				<p:dataTable id="table" var="tag" value="#{taggingBean.tags}"
+					rowKey="#{tag.id}" paginator="true" rows="10"
+					rowsPerPageTemplate="10,25,50" paginatorPosition="bottom"
+					emptyMessage="Sem registos." reflow="true">
+
+					<f:facet name="header">
+						<div class="table-header">
+							<span class="table-title">Itens marcados</span> <span
+								class="table-count">#{taggingBean.tags.size()} registos</span>
+						</div>
+					</f:facet>
+
+					<p:column headerText="Código" sortBy="#{tag.code}"
+						style="width:110px">
+						<span class="code-badge">#{tag.code}</span>
+					</p:column>
+
+					<p:column headerText="Item" sortBy="#{tag.itemName}">
+						<div class="cell-main">#{tag.itemName}</div>
+						<div class="cell-sub">#{tag.itemType} · #{tag.institution}</div>
+					</p:column>
+
+					<p:column headerText="Relevância" sortBy="#{tag.relevance}"
+						style="width:140px">
+						<span
+							class="status #{tag.relevance eq 'Principal' ? '' : (tag.relevance eq 'Significativa' ? 'status-warn' : 'status-muted')}">#{tag.relevance}</span>
+					</p:column>
+
+					<p:column headerText="Objectivo NBSAP"
+						sortBy="#{tag.nbsapObjective}">
+						<h:outputText value="#{tag.nbsapObjective}" />
+					</p:column>
+
+					<p:column headerText="Peso" sortBy="#{tag.weight}"
+						style="width:80px">
+						<h:outputText value="#{tag.weight}%" />
+					</p:column>
+
+					<p:column headerText="Acções" exportable="false"
+						style="width:110px; text-align:center">
+						<p:commandButton icon="pi pi-pencil" title="Editar"
+							styleClass="ui-button-flat" process="@this"
+							update=":tagForm:fields" oncomplete="PF('tagDlg').show()">
+							<f:setPropertyActionListener value="#{tag}"
+								target="#{taggingBean.selected}" />
+						</p:commandButton>
+						<p:commandButton icon="pi pi-trash" title="Eliminar"
+							styleClass="ui-button-danger ui-button-flat" process="@this"
+							update="table :growl" action="#{taggingBean.delete(tag.id)}">
+							<p:confirm header="Confirmação" message="Eliminar este registo?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+		</h:form>
+
+		<p:dialog id="tagDlg" widgetVar="tagDlg" header="Marcação de biodiversidade"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="720" styleClass="form-dialog">
+			<h:form id="tagForm">
+
+				<h:panelGroup id="fields" layout="block"
+					styleClass="form-grid ui-fluid">
+
+					<div class="form-field">
+						<p:outputLabel for="f_type" value="Tipo" />
+						<p:selectOneMenu id="f_type" value="#{taggingBean.selected.itemType}">
+							<f:selectItems value="#{taggingBean.itemTypes}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_institution" value="Instituição" />
+						<p:inputText id="f_institution" required="true"
+							requiredMessage="A instituição é obrigatória."
+							value="#{taggingBean.selected.institution}" />
+					</div>
+
+					<div class="form-field full">
+						<p:outputLabel for="f_name" value="Projecto, acção ou rubrica" />
+						<p:inputText id="f_name" required="true"
+							requiredMessage="O nome é obrigatório."
+							value="#{taggingBean.selected.itemName}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_relevance" value="Relevância para a biodiversidade" />
+						<p:selectOneMenu id="f_relevance"
+							value="#{taggingBean.selected.relevance}">
+							<f:selectItems value="#{taggingBean.relevanceOptions}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_nbsap" value="Objectivo NBSAP" />
+						<p:selectOneMenu id="f_nbsap" required="true"
+							requiredMessage="Seleccione um objectivo NBSAP."
+							value="#{taggingBean.selected.nbsapObjective}">
+							<f:selectItem itemLabel="Seleccionar..." itemValue=""
+								noSelectionOption="true" />
+							<f:selectItems value="#{taggingBean.nbsapObjectives}" />
+						</p:selectOneMenu>
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_weight" value="Peso para a biodiversidade (%)" />
+						<p:spinner id="f_weight" min="0" max="100" stepFactor="5"
+							value="#{taggingBean.selected.weight}" />
+					</div>
+
+					<div class="form-field full">
+						<p:outputLabel for="f_notes" value="Notas" />
+						<p:inputTextarea id="f_notes" rows="3" autoResize="false"
+							value="#{taggingBean.selected.notes}" />
+					</div>
+
+				</h:panelGroup>
+
+				<div class="dialog-actions">
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('tagDlg').hide()" />
+					<p:commandButton value="Guardar" icon="pi pi-check"
+						styleClass="primary-button" process="@form"
+						actionListener="#{taggingBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('tagDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Utilizadores</ui:define>
+
+	<ui:define name="content">
+		<h2>Utilizadores</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{userAccountBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{userAccountBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Instituição (ID)"
+					sortBy="#{item.institution_id}">
+					<h:outputText value="#{item.institution_id}" />
+				</p:column>
+				<p:column headerText="Perfil (ID)" sortBy="#{item.role_id}">
+					<h:outputText value="#{item.role_id}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{item.name}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+				<p:column headerText="Email" sortBy="#{item.email}">
+					<h:outputText value="#{item.email}" />
+				</p:column>
+				<p:column headerText="Utilizador" sortBy="#{item.username}">
+					<h:outputText value="#{item.username}" />
+				</p:column>
+				<p:column headerText="Estado" sortBy="#{item.status}">
+					<h:outputText value="#{item.status}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{userAccountBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{userAccountBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Utilizadores"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_institution_id" value="Instituição (ID)" />
+					<p:inputNumber id="f_institution_id"
+						value="#{userAccountBean.selected.institution_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_role_id" value="Perfil (ID)" />
+					<p:inputNumber id="f_role_id"
+						value="#{userAccountBean.selected.role_id}" decimalPlaces="0"
+						thousandSeparator="" />
+					<p:outputLabel for="f_name" value="Nome" />
+					<p:inputText id="f_name" value="#{userAccountBean.selected.name}" />
+					<p:outputLabel for="f_email" value="Email" />
+					<p:inputText id="f_email" value="#{userAccountBean.selected.email}" />
+					<p:outputLabel for="f_username" value="Utilizador" />
+					<p:inputText id="f_username"
+						value="#{userAccountBean.selected.username}" />
+					<p:outputLabel for="f_status" value="Estado" />
+					<p:inputText id="f_status"
+						value="#{userAccountBean.selected.status}" />
+					<p:outputLabel for="f_last_login_at" value="Último login em" />
+					<p:inputText id="f_last_login_at"
+						value="#{userAccountBean.selected.last_login_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{userAccountBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

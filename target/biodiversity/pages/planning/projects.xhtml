@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Projectos</ui:define>
+
+	<ui:define name="content">
+		<h2>Projectos</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{projectBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{projectBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Programa (ID)" sortBy="#{item.program_id}">
+					<h:outputText value="#{item.program_id}" />
+				</p:column>
+				<p:column headerText="Código" sortBy="#{item.code}">
+					<h:outputText value="#{item.code}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{item.name}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+				<p:column headerText="Responsável Instituição (ID)"
+					sortBy="#{item.responsible_institution_id}">
+					<h:outputText value="#{item.responsible_institution_id}" />
+				</p:column>
+				<p:column headerText="Implementadora Unidade"
+					sortBy="#{item.implementing_unit}">
+					<h:outputText value="#{item.implementing_unit}" />
+				</p:column>
+				<p:column headerText="Início Data" sortBy="#{item.start_date}">
+					<h:outputText value="#{item.start_date}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{projectBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{projectBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Projectos"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_program_id" value="Programa (ID)" />
+					<p:inputNumber id="f_program_id"
+						value="#{projectBean.selected.program_id}" decimalPlaces="0"
+						thousandSeparator="" />
+					<p:outputLabel for="f_code" value="Código" />
+					<p:inputText id="f_code" value="#{projectBean.selected.code}" />
+					<p:outputLabel for="f_name" value="Nome" />
+					<p:inputText id="f_name" value="#{projectBean.selected.name}" />
+					<p:outputLabel for="f_description" value="Descrição" />
+					<p:inputTextarea id="f_description"
+						value="#{projectBean.selected.description}" rows="3"
+						autoResize="false" />
+					<p:outputLabel for="f_responsible_institution_id"
+						value="Responsável Instituição (ID)" />
+					<p:inputNumber id="f_responsible_institution_id"
+						value="#{projectBean.selected.responsible_institution_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_implementing_unit"
+						value="Implementadora Unidade" />
+					<p:inputText id="f_implementing_unit"
+						value="#{projectBean.selected.implementing_unit}" />
+					<p:outputLabel for="f_start_date" value="Início Data" />
+					<p:datePicker id="f_start_date"
+						value="#{projectBean.selected.start_date}" pattern="dd/MM/yyyy"
+						showIcon="true" />
+					<p:outputLabel for="f_end_date" value="Fim Data" />
+					<p:datePicker id="f_end_date"
+						value="#{projectBean.selected.end_date}" pattern="dd/MM/yyyy"
+						showIcon="true" />
+					<p:outputLabel for="f_status" value="Estado" />
+					<p:inputText id="f_status" value="#{projectBean.selected.status}" />
+					<p:outputLabel for="f_created_by_id" value="Criado por (ID)" />
+					<p:inputNumber id="f_created_by_id"
+						value="#{projectBean.selected.created_by_id}" decimalPlaces="0"
+						thousandSeparator="" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{projectBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

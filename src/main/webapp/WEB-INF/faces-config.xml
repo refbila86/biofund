@@ -1,0 +1,11 @@
+<application>
+	<resource-bundle>
+		<base-name>i18n.messages</base-name>
+		<var>msg</var>
+	</resource-bundle>
+	<locale-config>
+		<default-locale>pt</default-locale>
+		<supported-locale>pt</supported-locale>
+		<supported-locale>en</supported-locale>
+	</locale-config>
+</application>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Evidências</ui:define>
+
+	<ui:define name="content">
+		<h2>Evidências</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{evidenceBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{evidenceBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Acção (ID)" sortBy="#{item.action_id}">
+					<h:outputText value="#{item.action_id}" />
+				</p:column>
+				<p:column headerText="Ficheiro Nome" sortBy="#{item.file_name}">
+					<h:outputText value="#{item.file_name}" />
+				</p:column>
+				<p:column headerText="Documento Tipo" sortBy="#{item.document_type}">
+					<h:outputText value="#{item.document_type}" />
+				</p:column>
+				<p:column headerText="Referência" sortBy="#{item.reference}">
+					<h:outputText value="#{item.reference}" />
+				</p:column>
+				<p:column headerText="Documento Data" sortBy="#{item.document_date}">
+					<h:outputText value="#{item.document_date}" />
+				</p:column>
+				<p:column headerText="Carregado por (ID)"
+					sortBy="#{item.uploaded_by_id}">
+					<h:outputText value="#{item.uploaded_by_id}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{evidenceBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{evidenceBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Evidências"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_action_id" value="Acção (ID)" />
+					<p:inputNumber id="f_action_id"
+						value="#{evidenceBean.selected.action_id}" decimalPlaces="0"
+						thousandSeparator="" />
+					<p:outputLabel for="f_file_name" value="Ficheiro Nome" />
+					<p:inputText id="f_file_name"
+						value="#{evidenceBean.selected.file_name}" />
+					<p:outputLabel for="f_document_type" value="Documento Tipo" />
+					<p:inputText id="f_document_type"
+						value="#{evidenceBean.selected.document_type}" />
+					<p:outputLabel for="f_reference" value="Referência" />
+					<p:inputText id="f_reference"
+						value="#{evidenceBean.selected.reference}" />
+					<p:outputLabel for="f_content_hash" value="Conteúdo Hash" />
+					<p:inputText id="f_content_hash"
+						value="#{evidenceBean.selected.content_hash}" />
+					<p:outputLabel for="f_document_date" value="Documento Data" />
+					<p:datePicker id="f_document_date"
+						value="#{evidenceBean.selected.document_date}"
+						pattern="dd/MM/yyyy" showIcon="true" />
+					<p:outputLabel for="f_uploaded_by_id" value="Carregado por (ID)" />
+					<p:inputNumber id="f_uploaded_by_id"
+						value="#{evidenceBean.selected.uploaded_by_id}" decimalPlaces="0"
+						thousandSeparator="" />
+					<p:outputLabel for="f_uploaded_at" value="Carregado em" />
+					<p:inputText id="f_uploaded_at"
+						value="#{evidenceBean.selected.uploaded_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{evidenceBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

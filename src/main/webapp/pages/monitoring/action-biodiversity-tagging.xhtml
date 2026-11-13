@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Marcação de Biodiversidade</ui:define>
+
+	<ui:define name="content">
+		<h2>Marcação de Biodiversidade</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{actionBiodiversityTaggingBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item"
+				value="#{actionBiodiversityTaggingBean.items}" rowKey="#{item.id}"
+				paginator="true" rows="10" rowsPerPageTemplate="10,25,50"
+				emptyMessage="Sem registos." reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Acção (ID)" sortBy="#{item.action_id}">
+					<h:outputText value="#{item.action_id}" />
+				</p:column>
+				<p:column headerText="Biodiversidade Classificação (ID)"
+					sortBy="#{item.biodiversity_classification_id}">
+					<h:outputText value="#{item.biodiversity_classification_id}" />
+				</p:column>
+				<p:column headerText="Validação Estado (ID)"
+					sortBy="#{item.validation_status_id}">
+					<h:outputText value="#{item.validation_status_id}" />
+				</p:column>
+				<p:column headerText="Atribuída Percentagem"
+					sortBy="#{item.assigned_percentage}">
+					<h:outputText value="#{item.assigned_percentage}" />
+				</p:column>
+				<p:column headerText="Evidência Referência"
+					sortBy="#{item.evidence_reference}">
+					<h:outputText value="#{item.evidence_reference}" />
+				</p:column>
+				<p:column headerText="Classificação Data"
+					sortBy="#{item.classification_date}">
+					<h:outputText value="#{item.classification_date}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{actionBiodiversityTaggingBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{actionBiodiversityTaggingBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg"
+			header="Marcação de Biodiversidade" modal="true" resizable="false"
+			closeOnEscape="true" responsive="true" width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_action_id" value="Acção (ID)" />
+					<p:inputNumber id="f_action_id"
+						value="#{actionBiodiversityTaggingBean.selected.action_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_biodiversity_classification_id"
+						value="Biodiversidade Classificação (ID)" />
+					<p:inputNumber id="f_biodiversity_classification_id"
+						value="#{actionBiodiversityTaggingBean.selected.biodiversity_classification_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_validation_status_id"
+						value="Validação Estado (ID)" />
+					<p:inputNumber id="f_validation_status_id"
+						value="#{actionBiodiversityTaggingBean.selected.validation_status_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_assigned_percentage"
+						value="Atribuída Percentagem" />
+					<p:inputNumber id="f_assigned_percentage"
+						value="#{actionBiodiversityTaggingBean.selected.assigned_percentage}"
+						decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+					<p:outputLabel for="f_justification" value="Justificação" />
+					<p:inputTextarea id="f_justification"
+						value="#{actionBiodiversityTaggingBean.selected.justification}"
+						rows="3" autoResize="false" />
+					<p:outputLabel for="f_evidence_reference"
+						value="Evidência Referência" />
+					<p:inputText id="f_evidence_reference"
+						value="#{actionBiodiversityTaggingBean.selected.evidence_reference}" />
+					<p:outputLabel for="f_classification_date"
+						value="Classificação Data" />
+					<p:datePicker id="f_classification_date"
+						value="#{actionBiodiversityTaggingBean.selected.classification_date}"
+						pattern="dd/MM/yyyy" showIcon="true" />
+					<p:outputLabel for="f_classified_by_id"
+						value="Classificado por (ID)" />
+					<p:inputNumber id="f_classified_by_id"
+						value="#{actionBiodiversityTaggingBean.selected.classified_by_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_validated_by_id" value="Validado por (ID)" />
+					<p:inputNumber id="f_validated_by_id"
+						value="#{actionBiodiversityTaggingBean.selected.validated_by_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_validated_at" value="Validado em" />
+					<p:inputText id="f_validated_at"
+						value="#{actionBiodiversityTaggingBean.selected.validated_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{actionBiodiversityTaggingBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

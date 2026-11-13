@@ -1,0 +1,158 @@
+body {
+	margin: 0;
+	font-family: Arial, Helvetica, sans-serif;
+	background: #f4f6f8;
+}
+
+/* ===== Estrutura ===== */
+.app-layout {
+	display: flex;
+	min-height: 100vh;
+	width: 100%;
+}
+
+.app-main {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.topbar {
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	padding: 12px 24px;
+	background: #fff;
+	border-bottom: 1px solid #e5e7eb;
+}
+
+.app-main .content {
+	flex: 1;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	padding: 24px;
+	box-sizing: border-box;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+	flex: 0 0 260px;
+	width: 260px;
+	min-height: 100vh;
+	background: #0f3d2e;
+	color: #fff;
+	overflow-y: auto;
+	box-sizing: border-box;
+}
+
+.sidebar-brand {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 18px 16px;
+	border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.sidebar-brand .brand-icon {
+	width: 40px;
+	height: 40px;
+	border-radius: 8px;
+	background: #2e9d6b;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: 700;
+}
+
+.sidebar-brand strong, .sidebar-brand span {
+	display: block;
+	line-height: 1.2;
+}
+
+.sidebar-brand span {
+	font-size: 12px;
+	opacity: .75;
+}
+
+.sidebar-menu {
+	padding: 12px 8px;
+}
+
+.menu-label {
+	display: block;
+	margin: 14px 12px 6px;
+	font-size: 11px;
+	letter-spacing: .08em;
+	opacity: .6;
+}
+
+.menu-heading {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 10px 12px 4px;
+	font-size: 13px;
+	font-weight: 600;
+	opacity: .9;
+}
+
+.sidebar a.menu-item, .sidebar a.submenu-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 9px 12px;
+	border-radius: 6px;
+	color: #fff;
+	text-decoration: none;
+	font-size: 14px;
+}
+
+.sidebar a.submenu-item {
+	padding-left: 36px;
+	opacity: .85;
+}
+
+.sidebar a.menu-item:hover, .sidebar a.submenu-item:hover {
+	background: rgba(255, 255, 255, .12);
+	opacity: 1;
+}
+
+/* ===== Utilitários ===== */
+.logout-form {
+	margin: 0;
+}
+
+.logout-btn {
+	background: none;
+	border: 0;
+	cursor: pointer;
+	color: inherit;
+	font: inherit;
+	padding: .5rem 1rem;
+}
+
+.mb-2 {
+	margin-bottom: .75rem;
+}
+
+.dialog-actions {
+	display: flex;
+	gap: .5rem;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+
+.grid-groups {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+	gap: 1rem;
+}
+
+.link-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	line-height: 1.9;
+}

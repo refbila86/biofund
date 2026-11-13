@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:ui="jakarta.faces.facelets">
+
+	<style type="text/css">
+/*<![CDATA[*/
+.sidebar.sb {
+	background: linear-gradient(180deg, #14532d 0%, #0f3d2e 100%);
+	padding: 0 0 24px;
+	scrollbar-width: thin;
+	scrollbar-color: rgba(255, 255, 255, .25) transparent;
+}
+
+/* ---------- Brand ---------- */
+.sidebar.sb a.sb-brand {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 20px 18px;
+	margin: 0 0 6px;
+	border-left: 0;
+	border-bottom: 1px solid rgba(255, 255, 255, .14);
+	color: #fff;
+	text-decoration: none;
+}
+
+.sidebar.sb a.sb-brand:hover {
+	background: transparent;
+}
+
+.sb-tile {
+	flex: 0 0 46px;
+	width: 46px;
+	height: 46px;
+	display: grid;
+	place-items: center;
+	border-radius: 13px;
+	background: #fff;
+	box-shadow: 0 6px 16px rgba(0, 0, 0, .28);
+}
+
+.sb-brand-text strong {
+	display: block;
+	font-size: 17px;
+	font-weight: 700;
+	line-height: 1.15;
+	color: #fff;
+}
+
+.sb-brand-text span {
+	display: block;
+	margin-top: 2px;
+	font-size: 12px;
+	color: #bbf7d0;
+}
+
+/* ---------- Navigation ---------- */
+.sb-nav {
+	padding: 6px 12px;
+}
+
+.sb-label {
+	display: block;
+	padding: 16px 10px 6px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: .04em;
+	color: rgba(255, 255, 255, .5);
+}
+
+.sidebar.sb a.sb-link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 2px 0;
+	padding: 8px 10px;
+	border-left: 0;
+	border-radius: 10px;
+	color: #e7f3ea;
+	font-size: 14px;
+	font-weight: 500;
+	text-decoration: none;
+	transition: background .15s, color .15s;
+}
+
+.sidebar.sb a.sb-link:hover {
+	background: rgba(255, 255, 255, .1);
+	color: #fff;
+}
+
+.sidebar.sb a.sb-link:focus-visible, .sb-summary:focus-visible {
+	outline: 2px solid #86efac;
+	outline-offset: 1px;
+}
+
+/* Active page */
+.sidebar.sb a.sb-link.active {
+	background: #fff;
+	color: #14532d;
+	font-weight: 600;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, .18);
+}
+
+/* ---------- Icon tiles ---------- */
+.sb-ico {
+	flex: 0 0 34px;
+	width: 34px;
+	height: 34px;
+	display: grid;
+	place-items: center;
+	border-radius: 9px;
+	font-size: 17px;
+	background: rgba(255, 255, 255, .12);
+	color: #bbf7d0;
+}
+
+.sb-ico.t-green {
+	background: rgba(74, 222, 128, .2);
+	color: #86efac;
+}
+
+.sb-ico.t-amber {
+	background: rgba(251, 191, 36, .2);
+	color: #fcd34d;
+}
+
+.sb-ico.t-sky {
+	background: rgba(56, 189, 248, .2);
+	color: #7dd3fc;
+}
+
+.sb-ico.t-violet {
+	background: rgba(167, 139, 250, .22);
+	color: #c4b5fd;
+}
+
+.sb-ico.t-rose {
+	background: rgba(251, 113, 133, .2);
+	color: #fda4af;
+}
+
+.sb-ico.t-teal {
+	background: rgba(45, 212, 191, .2);
+	color: #5eead4;
+}
+
+.sidebar.sb a.sb-link.active .sb-ico {
+	background: #14532d;
+	color: #fff;
+}
+
+/* ---------- Collapsible groups ---------- */
+.sb-group {
+	margin: 2px 0;
+}
+
+.sb-summary {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 8px 10px;
+	border-radius: 10px;
+	color: #fff;
+	font-weight: 600;
+	cursor: pointer;
+	list-style: none;
+	user-select: none;
+	transition: background .15s;
+}
+
+.sb-summary::-webkit-details-marker {
+	display: none;
+}
+
+.sb-summary:hover, .sb-group[open]>.sb-summary {
+	background: rgba(255, 255, 255, .09);
+}
+
+.sb-chev {
+	margin-left: auto;
+	font-size: 12px;
+	opacity: .7;
+	transition: transform .2s;
+}
+
+.sb-group[open] .sb-chev {
+	transform: rotate(180deg);
+}
+
+.sb-sub-list {
+	margin: 4px 0 8px 26px;
+	padding-left: 12px;
+	border-left: 1px solid rgba(255, 255, 255, .2);
+}
+
+.sidebar.sb a.sb-sub {
+	gap: 8px;
+	margin: 1px 0;
+	padding: 7px 10px;
+	font-size: 13.5px;
+	color: #cfe6d6;
+}
+
+@media ( prefers-reduced-motion : reduce) {
+	.sb-chev, .sidebar.sb a.sb-link, .sb-summary {
+		transition: none;
+	}
+}
+
+/* ---------- Logout footer ---------- */
+.sidebar.sb {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.sb-footer {
+	margin-top: auto;
+	padding: 14px 12px;
+	border-top: 1px solid rgba(255, 255, 255, .18);
+}
+
+.sidebar.sb a.sb-logout {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 10px;
+	border-radius: 10px;
+	color: #fecaca;
+	font-size: 14px;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background .15s;
+}
+
+.sidebar.sb a.sb-logout:hover {
+	background: rgba(239, 68, 68, .18);
+	color: #fff;
+}
+/*]]>*/
+</style>
+
+	<aside class="sidebar sb">
+
+		<!-- ===== Brand ===== -->
+		<h:link outcome="/dashboard" styleClass="sb-brand"
+			title="Go to dashboard">
+			<span class="sb-tile"> <svg viewBox="0 0 48 48" width="30"
+					height="30" aria-hidden="true">
+					<path
+						d="M9 31C9 19 18 11 38 10C39 28 31 38 19 38C15 38 12 36 9 34Z"
+						fill="#16a34a" />
+					<path d="M12 37C18 28 25 21 34 16" stroke="#ffffff"
+						stroke-width="2.6" fill="none" stroke-linecap="round" />
+					<circle cx="36" cy="12" r="3.2" fill="#f59e0b" />
+				</svg>
+			</span>
+			<span class="sb-brand-text"> <strong>Biodiversity</strong> <span>Management
+					Platform</span>
+			</span>
+		</h:link>
+
+		<nav class="sb-nav" aria-label="Main navigation">
+
+			<span class="sb-label">Main menu</span>
+
+			<h:link outcome="/dashboard"
+				styleClass="sb-link #{view.viewId.contains('dashboard') ? 'active' : ''}">
+				<span class="sb-ico t-green"><i class="pi pi-home"></i></span>
+				<span>Dashboard</span>
+			</h:link>
+
+			<span class="sb-label">Management</span>
+
+			<!-- Administration -->
+			<details class="sb-group">
+				<summary class="sb-summary">
+					<span class="sb-ico t-amber"><i class="pi pi-cog"></i></span> <span>Administration</span>
+					<i class="pi pi-chevron-down sb-chev"></i>
+				</summary>
+				<div class="sb-sub-list">
+					<h:link outcome="/pages/administration/institutions"
+						value="Institutions"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/administration/institutions') ? 'active' : ''}" />
+					<h:link outcome="/pages/administration/users" value="Users"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/administration/users') ? 'active' : ''}" />
+					<h:link outcome="/pages/administration/roles"
+						value="Roles and Permissions"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/administration/roles') ? 'active' : ''}" />
+					<h:link outcome="/pages/administration/sectors" value="Sectors"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/administration/sectors') ? 'active' : ''}" />
+					<h:link outcome="/pages/administration/focal-points"
+						value="Focal Points"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/administration/focal-points') ? 'active' : ''}" />
+				</div>
+			</details>
+
+			<!-- Biodiversity -->
+			<details class="sb-group">
+				<summary class="sb-summary">
+					<span class="sb-ico t-green"><i class="pi pi-globe"></i></span> <span>Biodiversity</span>
+					<i class="pi pi-chevron-down sb-chev"></i>
+				</summary>
+				<div class="sb-sub-list">
+					<h:link outcome="/pages/biodiversity/classifications"
+						value="Classifications"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/biodiversity/classifications') ? 'active' : ''}" />
+					<h:link outcome="/pages/biodiversity/tagging"
+						value="Biodiversity Tagging"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/biodiversity/tagging') ? 'active' : ''}" />
+					<h:link outcome="/pages/location/locations" value="Locations"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/location/locations') ? 'active' : ''}" />
+				</div>
+			</details>
+
+			<!-- Planning -->
+			<details class="sb-group">
+				<summary class="sb-summary">
+					<span class="sb-ico t-sky"><i class="pi pi-calendar"></i></span> <span>Planning</span>
+					<i class="pi pi-chevron-down sb-chev"></i>
+				</summary>
+				<div class="sb-sub-list">
+					<h:link outcome="/pages/planning/programs" value="Programs"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/planning/programs') ? 'active' : ''}" />
+					<h:link outcome="/pages/planning/projects" value="Projects"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/planning/projects') ? 'active' : ''}" />
+					<h:link outcome="/pages/planning/actions" value="Actions"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/planning/actions') ? 'active' : ''}" />
+				</div>
+			</details>
+
+			<!-- Strategy and Indicators -->
+			<details class="sb-group">
+				<summary class="sb-summary">
+					<span class="sb-ico t-violet"><i class="pi pi-chart-line"></i></span>
+					<span>Strategy and Indicators</span> <i
+						class="pi pi-chevron-down sb-chev"></i>
+				</summary>
+				<div class="sb-sub-list">
+					<h:link outcome="/pages/strategy/instruments"
+						value="Strategic Instruments"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/strategy/instruments') ? 'active' : ''}" />
+					<h:link outcome="/pages/strategy/targets" value="Targets"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/strategy/targets') ? 'active' : ''}" />
+					<h:link outcome="/pages/indicators/indicators" value="Indicators"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/indicators/indicators') ? 'active' : ''}" />
+					<h:link outcome="/pages/indicators/indicator-values"
+						value="Indicator Values"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/indicators/indicator-values') ? 'active' : ''}" />
+				</div>
+			</details>
+
+			<!-- Monitoring -->
+			<details class="sb-group">
+				<summary class="sb-summary">
+					<span class="sb-ico t-rose"><i class="pi pi-chart-bar"></i></span>
+					<span>Monitoring</span> <i class="pi pi-chevron-down sb-chev"></i>
+				</summary>
+				<div class="sb-sub-list">
+					<h:link outcome="/pages/monitoring/budgets" value="Budgets"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/monitoring/budgets') ? 'active' : ''}" />
+					<h:link outcome="/pages/monitoring/executions" value="Executions"
+						styleClass="sb-link sb-sub #{view.viewId.contains('/monitoring/executions') ? 'active' : ''}" />
+				</div>
+			</details>
+
+			<span class="sb-label">Other</span>
+
+			<h:link outcome="/pages/evidence/evidence"
+				styleClass="sb-link #{view.viewId.contains('/evidence/') ? 'active' : ''}">
+				<span class="sb-ico t-amber"><i class="pi pi-folder"></i></span>
+				<span>Evidence</span>
+			</h:link>
+
+			<h:link outcome="/pages/audit/audit-history"
+				styleClass="sb-link #{view.viewId.contains('/audit/') ? 'active' : ''}">
+				<span class="sb-ico t-sky"><i class="pi pi-history"></i></span>
+				<span>Audit History</span>
+			</h:link>
+
+			<h:link outcome="/pages/interoperability/imports"
+				styleClass="sb-link #{view.viewId.contains('/interoperability/') ? 'active' : ''}">
+				<span class="sb-ico t-teal"><i class="pi pi-sync"></i></span>
+				<span>Interoperability</span>
+			</h:link>
+
+		</nav>
+
+		<!-- ===== Logout ===== -->
+		<div class="sb-footer">
+			<form method="post" action="#{request.contextPath}/logout"
+				style="margin: 0;">
+				<button type="submit" class="sb-logout"
+					style="width: 100%; background: transparent; border: none; cursor: pointer; font: inherit;">
+					<i class="pi pi-sign-out" style="font-size: 18px;"></i> <span>Terminar
+						sessão</span>
+				</button>
+			</form>
+		</div>
+
+		<script type="text/javascript">
+//<![CDATA[
+(function () {
+	// Opens the group that contains the current page
+	document.querySelectorAll('.sidebar.sb .sb-sub.active').forEach(function (a) {
+		var d = a.closest('details');
+		if (d) { d.open = true; }
+	});
+})();
+//]]>
+		</script>
+
+	</aside>
+
+</ui:composition>

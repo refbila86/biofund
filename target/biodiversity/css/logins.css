@@ -1,0 +1,137 @@
+* {
+	box-sizing: border-box;
+}
+
+html, body {
+	height: 100%;
+	margin: 0;
+}
+
+body.login-page {
+	font-family: "Segoe UI", Roboto, Arial, sans-serif;
+	background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 45%, #00695c 100%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 1rem;
+}
+
+.login-card {
+	width: 100%;
+	max-width: 420px;
+	background: #fff;
+	border-radius: 16px;
+	padding: 2rem 2rem 1.5rem;
+	box-shadow: 0 20px 50px rgba(0, 0, 0, .25);
+}
+
+.brand {
+	text-align: center;
+	margin-bottom: 1.25rem;
+}
+
+.brand h1 {
+	font-size: 1.2rem;
+	margin: .75rem 0 .25rem;
+	color: #1b3a1f;
+	font-weight: 600;
+	line-height: 1.3;
+}
+
+.subtitle {
+	margin: 0;
+	color: #667085;
+	font-size: .9rem;
+}
+
+form label {
+	display: block;
+	margin: 1rem 0 .35rem;
+	font-size: .85rem;
+	font-weight: 600;
+	color: #344054;
+}
+
+form input[type=email], form input[type=password], form input[type=text]
+	{
+	width: 100%;
+	height: 44px;
+	padding: 0 .85rem;
+	font-size: .95rem;
+	border: 1px solid #d0d5dd;
+	border-radius: 8px;
+	outline: none;
+	background: #fff;
+	transition: border-color .15s, box-shadow .15s;
+}
+
+form input:focus {
+	border-color: #2e7d32;
+	box-shadow: 0 0 0 3px rgba(46, 125, 50, .18);
+}
+
+.pw-wrap {
+	position: relative;
+}
+
+.pw-wrap input {
+	padding-right: 5rem;
+}
+
+.pw-toggle {
+	position: absolute;
+	right: .5rem;
+	top: 50%;
+	transform: translateY(-50%);
+	background: none;
+	border: 0;
+	color: #2e7d32;
+	font-size: .8rem;
+	cursor: pointer;
+	padding: .25rem .5rem;
+}
+
+.btn-submit {
+	width: 100%;
+	height: 46px;
+	margin-top: 1.5rem;
+	border: 0;
+	border-radius: 8px;
+	background: #2e7d32;
+	color: #fff;
+	font-size: 1rem;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background .15s;
+}
+
+.btn-submit:hover {
+	background: #1b5e20;
+}
+
+.alert {
+	display: block;
+	padding: .7rem .9rem;
+	border-radius: 8px;
+	font-size: .88rem;
+	margin-bottom: .5rem;
+}
+
+.alert-error {
+	background: #fef3f2;
+	color: #b42318;
+	border: 1px solid #fecdca;
+}
+
+.alert-ok {
+	background: #ecfdf3;
+	color: #067647;
+	border: 1px solid #abefc6;
+}
+
+.footer {
+	text-align: center;
+	color: #98a2b3;
+	font-size: .78rem;
+	margin: 1.5rem 0 0;
+}

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Execução da Acção</ui:define>
+
+	<ui:define name="content">
+		<h2>Execução da Acção</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{actionExecutionBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item"
+				value="#{actionExecutionBean.items}" rowKey="#{item.id}"
+				paginator="true" rows="10" rowsPerPageTemplate="10,25,50"
+				emptyMessage="Sem registos." reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Acção (ID)" sortBy="#{item.action_id}">
+					<h:outputText value="#{item.action_id}" />
+				</p:column>
+				<p:column headerText="Financiamento Fonte (ID)"
+					sortBy="#{item.funding_source_id}">
+					<h:outputText value="#{item.funding_source_id}" />
+				</p:column>
+				<p:column headerText="Validação Estado (ID)"
+					sortBy="#{item.validation_status_id}">
+					<h:outputText value="#{item.validation_status_id}" />
+				</p:column>
+				<p:column headerText="Fiscal Ano" sortBy="#{item.fiscal_year}">
+					<h:outputText value="#{item.fiscal_year}" />
+				</p:column>
+				<p:column headerText="Período Início" sortBy="#{item.period_start}">
+					<h:outputText value="#{item.period_start}" />
+				</p:column>
+				<p:column headerText="Período Fim" sortBy="#{item.period_end}">
+					<h:outputText value="#{item.period_end}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{actionExecutionBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{actionExecutionBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Execução da Acção"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_action_id" value="Acção (ID)" />
+					<p:inputNumber id="f_action_id"
+						value="#{actionExecutionBean.selected.action_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_funding_source_id"
+						value="Financiamento Fonte (ID)" />
+					<p:inputNumber id="f_funding_source_id"
+						value="#{actionExecutionBean.selected.funding_source_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_validation_status_id"
+						value="Validação Estado (ID)" />
+					<p:inputNumber id="f_validation_status_id"
+						value="#{actionExecutionBean.selected.validation_status_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_fiscal_year" value="Fiscal Ano" />
+					<p:inputNumber id="f_fiscal_year"
+						value="#{actionExecutionBean.selected.fiscal_year}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_period_start" value="Período Início" />
+					<p:datePicker id="f_period_start"
+						value="#{actionExecutionBean.selected.period_start}"
+						pattern="dd/MM/yyyy" showIcon="true" />
+					<p:outputLabel for="f_period_end" value="Período Fim" />
+					<p:datePicker id="f_period_end"
+						value="#{actionExecutionBean.selected.period_end}"
+						pattern="dd/MM/yyyy" showIcon="true" />
+					<p:outputLabel for="f_physical_progress" value="Físico Progresso" />
+					<p:inputNumber id="f_physical_progress"
+						value="#{actionExecutionBean.selected.physical_progress}"
+						decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+					<p:outputLabel for="f_executed_amount" value="Executado Montante" />
+					<p:inputNumber id="f_executed_amount"
+						value="#{actionExecutionBean.selected.executed_amount}"
+						decimalPlaces="2" decimalSeparator="," thousandSeparator="." />
+					<p:outputLabel for="f_currency" value="Moeda" />
+					<p:inputText id="f_currency"
+						value="#{actionExecutionBean.selected.currency}" />
+					<p:outputLabel for="f_delivered_output" value="Entregue Resultado" />
+					<p:inputTextarea id="f_delivered_output"
+						value="#{actionExecutionBean.selected.delivered_output}" rows="3"
+						autoResize="false" />
+					<p:outputLabel for="f_evidence_reference"
+						value="Evidência Referência" />
+					<p:inputText id="f_evidence_reference"
+						value="#{actionExecutionBean.selected.evidence_reference}" />
+					<p:outputLabel for="f_recorded_at" value="Registado em" />
+					<p:inputText id="f_recorded_at"
+						value="#{actionExecutionBean.selected.recorded_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+					<p:outputLabel for="f_recorded_by_id" value="Registado por (ID)" />
+					<p:inputNumber id="f_recorded_by_id"
+						value="#{actionExecutionBean.selected.recorded_by_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_validated_by_id" value="Validado por (ID)" />
+					<p:inputNumber id="f_validated_by_id"
+						value="#{actionExecutionBean.selected.validated_by_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_validated_at" value="Validado em" />
+					<p:inputText id="f_validated_at"
+						value="#{actionExecutionBean.selected.validated_at}"
+						placeholder="dd/MM/aaaa HH:mm" />
+					<p:outputLabel for="f_validation_comment"
+						value="Validação Comentário" />
+					<p:inputTextarea id="f_validation_comment"
+						value="#{actionExecutionBean.selected.validation_comment}"
+						rows="3" autoResize="false" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{actionExecutionBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

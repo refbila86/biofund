@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/templates/layout.xhtml">
+	<ui:define name="title">Dashboard</ui:define>
+
+	<ui:define name="content">
+		<h1>Plataforma de Gestão da Biodiversidade</h1>
+		<p>Dashboard inicial. Os indicadores e gráficos serão ligados às
+			views analíticas do modelo.</p>
+
+		<div class="grid-groups">
+			<p:panel header="Catálogos">
+				<ul class="link-list">
+					<li><p:link value="Sectores" outcome="/pages/sector" /></li>
+					<li><p:link value="Instituições" outcome="/pages/institution" /></li>
+					<li><p:link value="Pontos Focais" outcome="/pages/focal-point" /></li>
+					<li><p:link value="Localizações" outcome="/pages/location" /></li>
+					<li><p:link value="Unidades de Medida"
+							outcome="/pages/measurement-unit" /></li>
+					<li><p:link value="Tipos de Intervenção"
+							outcome="/pages/intervention-type" /></li>
+					<li><p:link value="Estados da Acção"
+							outcome="/pages/action-status" /></li>
+					<li><p:link value="Estados de Validação"
+							outcome="/pages/validation-status" /></li>
+					<li><p:link value="Fontes de Financiamento"
+							outcome="/pages/funding-source" /></li>
+					<li><p:link value="Fontes de Dados"
+							outcome="/pages/data-source" /></li>
+					<li><p:link value="Classificações de Biodiversidade"
+							outcome="/pages/biodiversity-classification" /></li>
+				</ul>
+			</p:panel>
+			<p:panel header="Planeamento">
+				<ul class="link-list">
+					<li><p:link value="Instrumentos Estratégicos"
+							outcome="/pages/strategic-instrument" /></li>
+					<li><p:link value="Programas" outcome="/pages/program" /></li>
+					<li><p:link value="Projectos" outcome="/pages/project" /></li>
+					<li><p:link value="Metas" outcome="/pages/target" /></li>
+					<li><p:link value="Indicadores" outcome="/pages/indicator" /></li>
+					<li><p:link value="Metas por Período"
+							outcome="/pages/indicator-target-period" /></li>
+				</ul>
+			</p:panel>
+			<p:panel header="Acções">
+				<ul class="link-list">
+					<li><p:link value="Acções" outcome="/pages/action" /></li>
+					<li><p:link value="Orçamento da Acção"
+							outcome="/pages/action-budget" /></li>
+					<li><p:link value="Execução da Acção"
+							outcome="/pages/action-execution" /></li>
+					<li><p:link value="Indicadores da Acção"
+							outcome="/pages/action-indicator" /></li>
+					<li><p:link value="Localizações da Acção"
+							outcome="/pages/action-location" /></li>
+					<li><p:link value="Metas da Acção"
+							outcome="/pages/action-target" /></li>
+					<li><p:link value="Marcação de Biodiversidade"
+							outcome="/pages/action-biodiversity-tagging" /></li>
+				</ul>
+			</p:panel>
+			<p:panel header="Monitorização">
+				<ul class="link-list">
+					<li><p:link value="Valores de Indicadores"
+							outcome="/pages/indicator-value" /></li>
+					<li><p:link value="Evidências" outcome="/pages/evidence" /></li>
+					<li><p:link value="Importações" outcome="/pages/import-batch" /></li>
+					<li><p:link value="Histórico de Auditoria"
+							outcome="/pages/audit-history" /></li>
+				</ul>
+			</p:panel>
+			<p:panel header="Administração">
+				<ul class="link-list">
+					<li><p:link value="Utilizadores" outcome="/pages/user-account" /></li>
+					<li><p:link value="Perfis" outcome="/pages/role" /></li>
+				</ul>
+			</p:panel>
+		</div>
+	</ui:define>
+</ui:composition>

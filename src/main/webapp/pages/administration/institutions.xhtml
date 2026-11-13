@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Instituições</ui:define>
+
+	<ui:define name="content">
+
+		<div class="page-heading">
+			<div>
+				<h1>Instituições</h1>
+				<p>Gestão das instituições envolvidas na biodiversidade.</p>
+			</div>
+			<h:form id="headerForm">
+				<p:commandButton value="Nova instituição" icon="pi pi-plus"
+					styleClass="primary-button" process="@this"
+					actionListener="#{institutionBean.prepareNew}"
+					update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+			</h:form>
+		</div>
+
+		<h:form id="listForm">
+			<div class="content-card table-card">
+				<p:dataTable id="table" var="item" value="#{institutionBean.items}"
+					rowKey="#{item.id}" paginator="true" rows="10"
+					rowsPerPageTemplate="10,25,50" paginatorPosition="bottom"
+					emptyMessage="Sem registos." reflow="true">
+
+					<f:facet name="header">
+						<div class="table-header">
+							<span class="table-title">Lista de instituições</span> <span
+								class="table-count">#{institutionBean.items.size()}
+								registos</span>
+						</div>
+					</f:facet>
+
+					<p:column headerText="Código" sortBy="#{item.code}"
+						style="width:110px">
+						<span class="code-badge">#{item.code}</span>
+					</p:column>
+
+					<p:column headerText="Instituição" sortBy="#{item.name}">
+						<div class="cell-main">#{item.name}</div>
+						<div class="cell-sub">#{item.acronym}</div>
+					</p:column>
+
+					<p:column headerText="Mandato" sortBy="#{item.mandate}">
+						<h:outputText value="#{item.mandate}" />
+					</p:column>
+
+					<p:column headerText="Sector (ID)" sortBy="#{item.sector_id}"
+						style="width:110px">
+						<h:outputText value="#{item.sector_id}" />
+					</p:column>
+
+					<p:column headerText="Nível" sortBy="#{item.administrative_level}"
+						style="width:140px">
+						<h:outputText value="#{item.administrative_level}" />
+					</p:column>
+
+					<p:column headerText="Estado" sortBy="#{item.status}"
+						style="width:110px">
+						<h:panelGroup rendered="#{not empty item.status}">
+							<span
+								class="status #{item.status eq 'ACTIVE' or item.status eq 'ACTIVO' or item.status eq 'Activo' ? '' : 'status-muted'}">#{item.status}</span>
+						</h:panelGroup>
+					</p:column>
+
+					<p:column headerText="Acções" exportable="false"
+						style="width:110px; text-align:center">
+						<p:commandButton icon="pi pi-pencil" title="Editar"
+							styleClass="ui-button-flat" process="@this"
+							update=":editForm:fields" oncomplete="PF('editDlg').show()">
+							<f:setPropertyActionListener value="#{item}"
+								target="#{institutionBean.selected}" />
+						</p:commandButton>
+						<p:commandButton icon="pi pi-trash" title="Eliminar"
+							styleClass="ui-button-danger ui-button-flat" process="@this"
+							update="table :growl" action="#{institutionBean.delete(item.id)}">
+							<p:confirm header="Confirmação" message="Eliminar este registo?"
+								icon="pi pi-exclamation-triangle" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+			</div>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Instituição"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="720" styleClass="form-dialog">
+			<h:form id="editForm">
+
+				<h:panelGroup id="fields" layout="block"
+					styleClass="form-grid ui-fluid">
+
+					<div class="form-field">
+						<p:outputLabel for="f_code" value="Código" />
+						<p:inputText id="f_code" required="true"
+							requiredMessage="O código é obrigatório."
+							value="#{institutionBean.selected.code}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_acronym" value="Sigla" />
+						<p:inputText id="f_acronym"
+							value="#{institutionBean.selected.acronym}" />
+					</div>
+
+					<div class="form-field full">
+						<p:outputLabel for="f_name" value="Nome" />
+						<p:inputText id="f_name" required="true"
+							requiredMessage="O nome é obrigatório."
+							value="#{institutionBean.selected.name}" />
+					</div>
+
+					<div class="form-field full">
+						<p:outputLabel for="f_mandate" value="Mandato" />
+						<p:inputTextarea id="f_mandate" rows="3" autoResize="false"
+							value="#{institutionBean.selected.mandate}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_sector_id" value="Sector (ID)" />
+						<p:inputNumber id="f_sector_id" decimalPlaces="0"
+							thousandSeparator=""
+							value="#{institutionBean.selected.sector_id}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_administrative_level"
+							value="Nível administrativo" />
+						<p:inputText id="f_administrative_level"
+							value="#{institutionBean.selected.administrative_level}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_institutional_email" value="Email" />
+						<p:inputText id="f_institutional_email"
+							value="#{institutionBean.selected.institutional_email}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_phone" value="Telefone" />
+						<p:inputText id="f_phone"
+							value="#{institutionBean.selected.phone}" />
+					</div>
+
+					<div class="form-field">
+						<p:outputLabel for="f_status" value="Estado" />
+						<p:inputText id="f_status"
+							value="#{institutionBean.selected.status}" />
+					</div>
+
+				</h:panelGroup>
+
+				<div class="dialog-actions">
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+					<p:commandButton value="Guardar" icon="pi pi-check"
+						styleClass="primary-button" process="@form"
+						actionListener="#{institutionBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

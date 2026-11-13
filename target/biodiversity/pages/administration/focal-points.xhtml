@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="jakarta.faces.html" xmlns:f="jakarta.faces.core"
+	xmlns:ui="jakarta.faces.facelets" xmlns:p="http://primefaces.org/ui"
+	template="/WEB-INF/views/templates/main-template.xhtml">
+	<ui:define name="title">Pontos Focais</ui:define>
+
+	<ui:define name="content">
+		<h2>Pontos Focais</h2>
+
+		<h:form id="listForm">
+			<p:toolbar styleClass="mb-2">
+				<p:toolbarGroup>
+					<p:commandButton value="Novo" icon="pi pi-plus" process="@this"
+						actionListener="#{focalPointBean.prepareNew}"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:dataTable id="table" var="item" value="#{focalPointBean.items}"
+				rowKey="#{item.id}" paginator="true" rows="10"
+				rowsPerPageTemplate="10,25,50" emptyMessage="Sem registos."
+				reflow="true">
+				<p:column headerText="ID" sortBy="#{item.id}" width="70">
+					<h:outputText value="#{item.id}" />
+				</p:column>
+				<p:column headerText="Instituição (ID)"
+					sortBy="#{item.institution_id}">
+					<h:outputText value="#{item.institution_id}" />
+				</p:column>
+				<p:column headerText="Nome" sortBy="#{item.name}">
+					<h:outputText value="#{item.name}" />
+				</p:column>
+				<p:column headerText="Posição" sortBy="#{item.position}">
+					<h:outputText value="#{item.position}" />
+				</p:column>
+				<p:column headerText="Email" sortBy="#{item.email}">
+					<h:outputText value="#{item.email}" />
+				</p:column>
+				<p:column headerText="Telefone" sortBy="#{item.phone}">
+					<h:outputText value="#{item.phone}" />
+				</p:column>
+				<p:column headerText="Início Data" sortBy="#{item.start_date}">
+					<h:outputText value="#{item.start_date}" />
+				</p:column>
+				<p:column headerText="Acções" width="110" exportable="false">
+					<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+						update=":editForm:fields" oncomplete="PF('editDlg').show()">
+						<f:setPropertyActionListener value="#{item}"
+							target="#{focalPointBean.selected}" />
+					</p:commandButton>
+					<p:commandButton icon="pi pi-trash" title="Eliminar"
+						process="@this" update="table" styleClass="ui-button-danger"
+						action="#{focalPointBean.delete(item.id)}">
+						<p:confirm header="Confirmação" message="Eliminar este registo?"
+							icon="pi pi-exclamation-triangle" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+		</h:form>
+
+		<p:dialog id="editDlg" widgetVar="editDlg" header="Pontos Focais"
+			modal="true" resizable="false" closeOnEscape="true" responsive="true"
+			width="640">
+			<h:form id="editForm">
+				<p:panelGrid id="fields" columns="2" layout="grid"
+					styleClass="ui-fluid"
+					columnClasses="col-12 md:col-4,col-12 md:col-8">
+					<p:outputLabel for="f_institution_id" value="Instituição (ID)" />
+					<p:inputNumber id="f_institution_id"
+						value="#{focalPointBean.selected.institution_id}"
+						decimalPlaces="0" thousandSeparator="" />
+					<p:outputLabel for="f_name" value="Nome" />
+					<p:inputText id="f_name" value="#{focalPointBean.selected.name}" />
+					<p:outputLabel for="f_position" value="Posição" />
+					<p:inputText id="f_position"
+						value="#{focalPointBean.selected.position}" />
+					<p:outputLabel for="f_email" value="Email" />
+					<p:inputText id="f_email" value="#{focalPointBean.selected.email}" />
+					<p:outputLabel for="f_phone" value="Telefone" />
+					<p:inputText id="f_phone" value="#{focalPointBean.selected.phone}" />
+					<p:outputLabel for="f_start_date" value="Início Data" />
+					<p:datePicker id="f_start_date"
+						value="#{focalPointBean.selected.start_date}" pattern="dd/MM/yyyy"
+						showIcon="true" />
+					<p:outputLabel for="f_end_date" value="Fim Data" />
+					<p:datePicker id="f_end_date"
+						value="#{focalPointBean.selected.end_date}" pattern="dd/MM/yyyy"
+						showIcon="true" />
+					<p:outputLabel for="f_active" value="Activo" />
+					<p:selectBooleanCheckbox id="f_active"
+						value="#{focalPointBean.selected.active}" />
+				</p:panelGrid>
+				<div class="dialog-actions">
+					<p:commandButton value="Guardar" icon="pi pi-check" process="@form"
+						actionListener="#{focalPointBean.save}"
+						update="fields :listForm:table :growl"
+						oncomplete="if (!args.validationFailed) PF('editDlg').hide()" />
+					<p:commandButton value="Cancelar" icon="pi pi-times" type="button"
+						styleClass="ui-button-flat" onclick="PF('editDlg').hide()" />
+				</div>
+			</h:form>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
